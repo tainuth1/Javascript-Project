@@ -1,12 +1,55 @@
 import products from "./products.js";
 
 let productData = products;
+let categories = ["All"];
 
 const productContainer = document.getElementById("product-card-container");
+const search = document.getElementById("search");
+const showMoreBtn = document.getElementById("show-more-btn");
+const categoryContainer = document.getElementById("category-container");
+
+productData.forEach((product) => {
+  if (!categories.includes(product.category)) {
+    categories.push(product.category);
+  }
+});
+
+const renderCategory = () => {
+  let cateList = "";
+  categories.forEach((cate) => {
+    cateList += `
+      <li class="flex items-center">
+        <input
+          type="radio"
+          name="category"
+          ${cate == "All" ? "checked" : ""}
+          class="h-5 w-5 text-gray-600"
+        />
+        <label class="ml-2 text-gray-700">${cate}</label>
+      </li>
+    `;
+  });
+  categoryContainer.innerHTML = cateList;
+};
+renderCategory();
+
+search.addEventListener("input", () => {
+  const filteredProduct = productData.filter((pro) =>
+    pro.name.toLowerCase().includes(search.value.toLowerCase())
+  );
+
+  renderProduct(filteredProduct);
+});
+
+let visiblCount = 8;
+showMoreBtn.addEventListener("click", () => {
+  visiblCount += 8;
+  renderProduct(productData);
+});
 
 const renderProduct = (filteredProduct) => {
   let productCard = "";
-  filteredProduct.forEach((product) => {
+  filteredProduct.slice(0, visiblCount).forEach((product) => {
     productCard += `
             <div class="col-span-1">
               <div
@@ -89,5 +132,10 @@ const renderProduct = (filteredProduct) => {
         `;
   });
   productContainer.innerHTML = productCard;
+  if (visiblCount >= filteredProduct.length) {
+    showMoreBtn.classList.add("hidden");
+  } else {
+    showMoreBtn.classList.remove("hidden");
+  }
 };
 renderProduct(productData);

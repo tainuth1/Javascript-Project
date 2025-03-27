@@ -594,12 +594,12 @@ video {
   top: 0.5rem;
 }
 
-.top-\[90px\] {
-  top: 90px;
-}
-
 .top-5 {
   top: 1.25rem;
+}
+
+.top-\[90px\] {
+  top: 90px;
 }
 
 .z-10 {
