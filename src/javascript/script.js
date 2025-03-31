@@ -14,14 +14,27 @@ productData.forEach((product) => {
   }
 });
 
+const filterByCategory = (category = "All") => {
+  if (category == "All") {
+    renderProduct(productData);
+  } else {
+    const productToShow = productData.filter(
+      (pro) => pro.category === category
+    );
+    renderProduct(productToShow);
+  }
+};
+window.filterByCategory = filterByCategory;
+
 const renderCategory = () => {
   let cateList = "";
   categories.forEach((cate) => {
     cateList += `
       <li class="flex items-center">
-        <input
+        <input 
           type="radio"
           name="category"
+          onclick="filterByCategory('${cate}')"
           ${cate == "All" ? "checked" : ""}
           class="h-5 w-5 text-gray-600"
         />
