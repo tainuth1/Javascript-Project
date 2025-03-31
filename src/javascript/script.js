@@ -2,17 +2,35 @@ import products from "./products.js";
 
 let productData = products;
 let categories = ["All"];
+let prices = [25, 50, 100, 150, 200, 250, 300, 350];
 
 const productContainer = document.getElementById("product-card-container");
 const search = document.getElementById("search");
 const showMoreBtn = document.getElementById("show-more-btn");
 const categoryContainer = document.getElementById("category-container");
+const priceContainer = document.getElementById("filter-price");
 
 productData.forEach((product) => {
   if (!categories.includes(product.category)) {
     categories.push(product.category);
   }
 });
+
+const renderFilterPrice = () => {
+  let priceList = "";
+  prices.forEach((price) => {
+    priceList += `
+      <label
+        class="flex items-center justify-center p-1 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
+      >
+        <input type="checkbox" class="hidden" />
+        <span class="text-gray-700">${price}</span>
+      </label>
+    `;
+  });
+  priceContainer.innerHTML = priceList;
+};
+renderFilterPrice();
 
 const filterByCategory = (category = "All") => {
   if (category == "All") {
