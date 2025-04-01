@@ -21,7 +21,8 @@ const renderFilterPrice = () => {
   prices.forEach((price) => {
     priceList += `
       <label
-        class="flex items-center justify-center p-1 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
+        onclick="filterByPrice(${price})"
+        class="price-btn flex items-center justify-center p-1 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
       >
         <input type="checkbox" class="hidden" />
         <span class="text-gray-700">${price}</span>
@@ -29,8 +30,29 @@ const renderFilterPrice = () => {
     `;
   });
   priceContainer.innerHTML = priceList;
+
+  const priceBtn = document.querySelectorAll(".price-btn");
+
+  priceBtn.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      //loop for remove old active style from last button
+      priceBtn.forEach((rBtn) => {
+        rBtn.classList.remove("border-blue-600");
+      });
+      //add active style to clicked button
+      btn.classList.add("border-blue-600");
+    });
+  });
 };
 renderFilterPrice();
+//                      100
+const filterByPrice = (price) => {
+  const productAfterFilter = productData.filter(
+    (product) => product.price >= price
+  );
+  renderProduct(productAfterFilter);
+};
+window.filterByPrice = filterByPrice;
 
 const filterByCategory = (category = "All") => {
   if (category == "All") {
