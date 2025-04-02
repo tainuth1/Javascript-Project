@@ -3,6 +3,7 @@ import products from "./products.js";
 let productData = products;
 let categories = ["All"];
 let prices = [25, 50, 100, 150, 200, 250, 300, 350];
+let carts = [];
 
 const productContainer = document.getElementById("product-card-container");
 const search = document.getElementById("search");
@@ -127,6 +128,7 @@ const renderProduct = (filteredProduct) => {
               <div class="grid grid-cols-6 gap-3 mt-2">
                 <div class="col-span-4 flex items-center gap-2">
                   <button
+                    id="decrease"
                     class="h-full px-2 bg-gray-200 text-xl flex justify-center items-center text-gray-800 rounded-md hover:bg-gray-300 active:bg-gray-200"
                   >
                     <svg
@@ -145,9 +147,11 @@ const renderProduct = (filteredProduct) => {
                   <input
                     type="text"
                     value="1"
-                    class="w-16 h-full text-center border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    id="quantity-${product.id}"
+                    class="quantity w-16 h-full text-center border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
                   <button
+                    id="increase"
                     class="h-full px-2 bg-blue-500 text-xl flex justify-center items-center text-white rounded-md hover:bg-blue-600 active:bg-blue-500"
                   >
                     <svg
@@ -165,6 +169,7 @@ const renderProduct = (filteredProduct) => {
                   </button>
                 </div>
                 <button
+                  onclick="addToCart(${product.id})"
                   class="col-span-2 w-full flex justify-center items-center py-2 text-sm bg-blue-600 transition-all rounded-md text-white hover:bg-blue-800"
                 >
                   <svg
@@ -190,5 +195,48 @@ const renderProduct = (filteredProduct) => {
   } else {
     showMoreBtn.classList.remove("hidden");
   }
+
+  const decreaseBtn = document.querySelectorAll("#decrease");
+  const increaseBtn = document.querySelectorAll("#increase");
+  const quantity = document.querySelectorAll(".quantity");
+
+  increaseBtn.forEach((btn, index) => {
+    btn.addEventListener("click", () => {
+      quantity[index].value = parseInt(quantity[index].value) + 1;
+    });
+  });
+  decreaseBtn.forEach((btn, index) => {
+    btn.addEventListener("click", () => {
+      quantity[index].value = parseInt(quantity[index].value) - 1;
+      if (parseInt(quantity[index].value) < 1) {
+        quantity[index].value = 1;
+      }
+    });
+  });
 };
 renderProduct(productData);
+
+const addToCart = (id) => {
+  const qtyValue = document.getElementById(`quantity-${id}`);
+  const product = productData.find((item) => item.id == id);
+
+  const chekcIfExist = carts.find((item) => item.id == product.id);
+
+  if (chekcIfExist) {
+    const cartAfterUpdateQty = carts.map((item) =>
+      item.id == id
+        ? { ...item, quantity: item.quantity + parseInt(qtyValue.value) }
+        : item
+    );
+    carts = cartAfterUpdateQty;
+    localStorage.setItem("carts", JSON.stringify(carts));
+  } else {
+    const newCartArray = [
+      ...carts,
+      { ...product, quantity: parseInt(qtyValue.value) },
+    ];
+    carts = newCartArray;
+    localStorage.setItem("carts", JSON.stringify(carts));
+  }
+};
+window.addToCart = addToCart;
