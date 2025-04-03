@@ -270,6 +270,7 @@ const renderCartItem = () => {
         <span class="text-gray-600 font-medium">$${item.price}</span>
         <span>${item.quantity}</span>
         <div
+          onclick="removeCartItem(${item.id})"
           class="text-white bg-red-600 py-1 px-4 rounded cursor-pointer"
         >
           Remove
@@ -278,10 +279,17 @@ const renderCartItem = () => {
     `;
   });
   cartContainer.innerHTML = listCart;
-  
+
   let total = carts.reduce((prev, curr) => {
     return curr.price * curr.quantity + prev;
   }, 0);
   totalPrice.innerHTML = `$${total.toFixed(2)}`;
 };
 renderCartItem();
+
+const removeCartItem = (id) => {
+  carts = carts.filter((pro) => pro.id != id);
+  localStorage.setItem("carts", JSON.stringify(carts));
+  renderCartItem();
+};
+window.removeCartItem = removeCartItem;
