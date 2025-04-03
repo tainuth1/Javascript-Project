@@ -3,7 +3,7 @@ import products from "./products.js";
 let productData = products;
 let categories = ["All"];
 let prices = [25, 50, 100, 150, 200, 250, 300, 350];
-let carts = [];
+let carts = JSON.parse(localStorage.getItem("carts")) || [];
 
 const productContainer = document.getElementById("product-card-container");
 const search = document.getElementById("search");
@@ -216,6 +216,8 @@ const renderProduct = (filteredProduct) => {
 };
 renderProduct(productData);
 
+const itemCount = document.getElementById("item-count");
+itemCount.innerHTML = carts.length;
 const addToCart = (id) => {
   const qtyValue = document.getElementById(`quantity-${id}`);
   const product = productData.find((item) => item.id == id);
@@ -238,5 +240,48 @@ const addToCart = (id) => {
     carts = newCartArray;
     localStorage.setItem("carts", JSON.stringify(carts));
   }
+  renderCartItem();
+  itemCount.innerHTML = carts.length;
 };
 window.addToCart = addToCart;
+
+const cartContainer = document.getElementById("cart-item-container");
+const totalPrice = document.getElementById("total-count");
+const renderCartItem = () => {
+  let listCart = "";
+  carts.forEach((item) => {
+    listCart += `
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-5">
+          <img
+            src="${item.image}"
+            class="w-14 h-14 border rounded-lg"
+            alt=""
+          />
+          <div class="">
+            <p class="w-40 text-left font-medium truncate">
+              ${item.name}
+            </p>
+            <p class="w-40 truncate text-sm text-gray-500">
+              ${item.description}
+            </p>
+          </div>
+        </div>
+        <span class="text-gray-600 font-medium">$${item.price}</span>
+        <span>${item.quantity}</span>
+        <div
+          class="text-white bg-red-600 py-1 px-4 rounded cursor-pointer"
+        >
+          Remove
+        </div>
+      </div>
+    `;
+  });
+  cartContainer.innerHTML = listCart;
+  
+  let total = carts.reduce((prev, curr) => {
+    return curr.price * curr.quantity + prev;
+  }, 0);
+  totalPrice.innerHTML = `$${total.toFixed(2)}`;
+};
+renderCartItem();

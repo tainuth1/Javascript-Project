@@ -37,6 +37,7 @@
         <div class="flex gap-5">
           <button class="w-8 h-w-8 relative" id="show-cart-btn">
             <span
+              id="item-count"
               class="absolute -right-1 -top-1 text-[10px] w-5 h-5 flex justify-center items-center rounded-full bg-red-600 text-white"
               >10</span
             >
@@ -51,38 +52,16 @@
             id="cart-container"
           >
             <div class="relative h-full overflow-hidden">
-              <div class="w-full h-full flex flex-col gap-3 p-3">
-                <div class="flex items-center justify-between gap-3">
-                  <div class="flex items-center gap-5">
-                    <img
-                      src="https://images-na.ssl-images-amazon.com/images/I/71xvfA4ozZL._SL1500_.jpg"
-                      class="w-14 h-14 border rounded-lg"
-                      alt=""
-                    />
-                    <div class="">
-                      <p class="w-40 text-left font-medium truncate">
-                        Wireless Headphone
-                      </p>
-                      <p class="w-40 truncate text-sm text-gray-500">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      </p>
-                    </div>
-                  </div>
-                  <span class="text-gray-600 font-medium">$99.99</span>
-                  <span>3</span>
-                  <div
-                    class="text-white bg-red-600 py-1 px-4 rounded cursor-pointer"
-                  >
-                    Remove
-                  </div>
-                </div>
+              <div class="w-full h-full flex flex-col gap-3 p-3" id="cart-item-container">
+                <!--  -->
+                <!--  -->
               </div>
 
               <!-- Checkout -->
               <div class="absolute w-full bottom-0 rounded-sm">
                 <div class="flex justify-between items-center px-5">
                   <h2 class="text-gray-800 text-2xl">Total :</h2>
-                  <h2 class="text-yellow-600 text-2xl font-bold">$4040</h2>
+                  <h2 class="text-yellow-600 text-2xl font-bold" id="total-count">$4040</h2>
                 </div>
                 <a
                   href="checkout.html"
