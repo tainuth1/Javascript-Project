@@ -90,14 +90,15 @@
               <div class="flex flex-col gap-4 py-3 border-b-2">
                 <div class="flex justify-between items-center">
                   <span class="text-lg text-gray-600">Quantity : </span>
-                  <span class="text-lg text-gray-800 font-bold">20 Items</span>
+                  <span class="text-lg text-gray-800 font-bold" id="total-quantity">20 Items</span>
                 </div>
                 <div class="flex justify-between items-center">
                   <span class="text-lg text-gray-600">Total Price : </span>
-                  <span class="text-lg text-gray-800 font-bold">$699.99</span>
+                  <span class="text-lg text-gray-800 font-bold" id="total-price">$699.99</span>
                 </div>
               </div>
               <button
+                id="checkout-btn"
                 class="w-full my-3 bg-[#212121] py-3 text-lg rounded-md font-bold text-white"
               >
                 Checkout
@@ -109,5 +110,6 @@
     </div>
     <!-- Cart Item -->
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="javascript/checkout.js"></script>
 </html>

@@ -33,21 +33,23 @@ const renderCartItem = () => {
                 class="inline space-x-2 border border-gray-300 rounded-full px-4 py-1 shadow-sm"
                 >
                 <button
+                    onclick="decrease(${cart.id})"
                     class="text-lg font-medium px-1 text-gray-700 hover:text-red-500"
                 >
                     -
                 </button>
                 <span class="text-lg font-medium">${cart.quantity}</span>
                 <button
+                    onclick="increase(${cart.id})"
                     class="text-lg font-medium px-1 text-gray-700 hover:text-green-500"
                 >
                     +
                 </button>
                 </div>
             </div>
-            <div class="col-span-3 text-gray-700 font-bold">$${
+            <div class="col-span-3 text-gray-700 font-bold">$${(
               cart.price * cart.quantity
-            }</div>
+            ).toFixed(2)}</div>
             <div class="col-span-1 text-gray-700">
             <button onclick="removeCartItem(${
               cart.id
@@ -79,4 +81,68 @@ const removeCartItem = (id) => {
   carts = carts.filter((pro) => pro.id != id);
   localStorage.setItem("carts", JSON.stringify(carts));
   renderCartItem();
+  showSumary();
 };
+
+const totalQuantity = document.getElementById("total-quantity");
+const totalPrice = document.getElementById("total-price");
+const showSumary = () => {
+  const quantity = carts.reduce((prev, curr) => {
+    return prev + curr.quantity;
+  }, 0);
+  totalQuantity.innerHTML = `${quantity} Items`;
+
+  const price = carts.reduce((prev, curr) => {
+    return prev + curr.price * curr.quantity;
+  }, 0);
+  totalPrice.innerHTML = `${price.toFixed(2)}$`;
+};
+showSumary();
+
+const increase = (id) => {
+  carts = carts.map((cart) =>
+    cart.id === id ? { ...cart, quantity: cart.quantity + 1 } : cart
+  );
+  localStorage.setItem("carts", JSON.stringify(carts));
+  renderCartItem();
+  showSumary();
+};
+const decrease = (id) => {
+  const checkQuantity = carts.find((cart) => cart.id == id);
+
+  if (checkQuantity.quantity <= 1) {
+    removeCartItem(id);
+  } else {
+    carts = carts.map((cart) =>
+      cart.id === id ? { ...cart, quantity: cart.quantity - 1 } : cart
+    );
+    localStorage.setItem("carts", JSON.stringify(carts));
+  }
+
+  renderCartItem();
+  showSumary();
+};
+
+const checkout = () => {
+  if (carts.length === 0) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Your Carts is Empty",
+    });
+  } else {
+    Swal.fire({
+      title: "Checkout Successfuly",
+      icon: "success",
+      draggable: true,
+    });
+  }
+  carts = [];
+  localStorage.setItem("carts", JSON.stringify(carts));
+  showSumary();
+  renderCartItem();
+};
+
+document.getElementById("checkout-btn").addEventListener("click", () => {
+  checkout();
+});
